@@ -3,7 +3,7 @@ import ClaudeRecipe from "./ClaudeRecipe";
 import IngredientsList from "./IngredientsList";
 
 export default function Main() {
-    const [ingredients, setIngredients] = useState(["Beef", "Tomato", "Onion", "Garlic", "Pasta"])
+    const [ingredients, setIngredients] = useState([])
     const [isShown, setIsShown] = useState(false)
 
     const ingredientsListItems = ingredients.map(ingredient => (
