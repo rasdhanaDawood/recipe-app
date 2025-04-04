@@ -1,18 +1,17 @@
 import React, { useState } from "react";
 import ClaudeRecipe from "./ClaudeRecipe";
 import IngredientsList from "./IngredientsList";
-import {generateRecipe} from "../api.js"
 
 export default function Main() {
     const [ingredients, setIngredients] = useState(["Beef", "Tomato", "Onion", "Garlic", "Pasta"])
-    const [isShown, recipe] = useState(false)
+    const [isShown, setIsShown] = useState(false)
 
     const ingredientsListItems = ingredients.map(ingredient => (
         <li key={ingredient}>{ingredient}</li>
     ))
 
     function buttonClicked() {
-        generateRecipe(ingredients)
+        setIsShown(isShown => !isShown) 
     }
     function addIngredients(event) {
         event.preventDefault()
@@ -34,7 +33,7 @@ export default function Main() {
             </form>
             {ingredients.length > 0 && <IngredientsList ingredients={ingredientsListItems} click={buttonClicked} />}
 
-            {isShown && <ClaudeRecipe recipe={generateRecipe} />}
+            {isShown && <ClaudeRecipe />}
         </main> 
     )
 }
