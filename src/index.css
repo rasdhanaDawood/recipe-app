@@ -103,3 +103,45 @@ ul.ingredients-list li {
   font-size: 0.875rem;
   cursor: pointer;
 }
+
+.suggested-recipe-container{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  background: #F0EFEB;
+  padding: 10px 28px;
+  margin-top: 20px;
+  color: #475467;
+}
+
+.suggested-recipe{
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.image-container {
+  flex: 0 0 30%;
+}
+
+h4{
+  margin: 0;
+  padding-bottom: 1rem;
+}
+.ingredients-container{
+  flex: 0 0 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 1rem;
+}
+.ingredients-listItems{
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font: 1em sans-serif;
+}

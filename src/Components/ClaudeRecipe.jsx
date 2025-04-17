@@ -1,37 +1,84 @@
+import { all } from "axios";
+import React, { useState, useEffect } from "react";
+import '../index.css' ;
 
-export default function ClaudeRecipe(props) {
+export default function ClaudeRecipe({ingredients}) {
+    const [meals, setMeals] = React.useState([])
+    useEffect(() => {
+        if (!ingredients) return;
+        const fetchMeals = async () => {
+            try {
+                const res = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?i=${ingredients[0]}`)
+                const data = await res.json()
+                if(!data.meals) return;
+                const commonMeals = data.meals;
+                const mealsIds = commonMeals.map(meal => meal.idMeal);
+                console.log("mealsIds:", mealsIds);
+                const mealData = await Promise.all(
+                    mealsIds.map(async (id) => {
+                        const res = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`)
+                        const data = await res.json()
+                        if(!data.meals) return;
+                        return data.meals[0]
+                    })
+                );
+                console.log("mealData:", mealData);
+
+                const matchedItems = mealData.filter(meal => {
+                    for (let i = 1; i <= 20; i++){
+                        const item = meal[`strIngredient${i}`];
+                        
+                        if ((item && item.toLowerCase() === ingredients[1].toLowerCase())
+                            || (item && item.toLowerCase() === ingredients[2].toLowerCase())) {
+                            return meal
+                        }
+                    }
+                })
+                if(matchedItems.length === 0) return;
+                console.log("ingredients:", ingredients);
+                console.log("matchedItems:", matchedItems);
+                const randomIndex = Math.floor(Math.random() * matchedItems.length)
+                console.log("randomIndex:", randomIndex);
+                setMeals(matchedItems[randomIndex])
+            } catch (error) {
+                console.log("Error fetching meals:", error)
+            }
+        }
+        fetchMeals()
+    }, [])
+    console.log("meals length:", meals.length)
+    console.log("meals:", meals)
 
     return (
         <section>
-    <h2>Chef Claude Recommends:</h2>
-    <article className="suggested-recipe-container" aria-live="polite">
-        <p>Based on the ingredients you have available, I would recommend making a simple a delicious <strong>Beef Bolognese Pasta</strong>. Here is the recipe:</p>
-        <h3>Beef Bolognese Pasta</h3>
-        <strong>Ingredients:</strong>
-        <ul>
-            <li>1 lb. ground beef</li>
-            <li>1 onion, diced</li>
-            <li>3 cloves garlic, minced</li>
-            <li>2 tablespoons tomato paste</li>
-            <li>1 (28 oz) can crushed tomatoes</li>
-            <li>1 cup beef broth</li>
-            <li>1 teaspoon dried oregano</li>
-            <li>1 teaspoon dried basil</li>
-            <li>Salt and pepper to taste</li>
-            <li>8 oz pasta of your choice (e.g., spaghetti, penne, or linguine)</li>
-        </ul>
-        <strong>Instructions:</strong>
-        <ol>
-            <li>Bring a large pot of salted water to a boil for the pasta.</li>
-            <li>In a large skillet or Dutch oven, cook the ground beef over medium-high heat, breaking it up with a wooden spoon, until browned and cooked through, about 5-7 minutes.</li>
-            <li>Add the diced onion and minced garlic to the skillet and cook for 2-3 minutes, until the onion is translucent.</li>
-            <li>Stir in the tomato paste and cook for 1 minute.</li>
-            <li>Add the crushed tomatoes, beef broth, oregano, and basil. Season with salt and pepper to taste.</li>
-            <li>Reduce the heat to low and let the sauce simmer for 15-20 minutes, stirring occasionally, to allow the flavors to meld.</li>
-            <li>While the sauce is simmering, cook the pasta according to the package instructions. Drain the pasta and return it to the pot.</li>
-            <li>Add the Bolognese sauce to the cooked pasta and toss to combine.</li>
-            <li>Serve hot, garnished with additional fresh basil or grated Parmesan cheese if desired.</li>
-        </ol>
+            <h2>Chef Claude Recommends:</h2>
+            <article className="suggested-recipe-container" aria-live="polite">
+            {meals && Object.keys(meals).length > 0 ? (
+                    <div key={meals.idMeal}>
+                        <h3>{meals.strMeal}</h3>
+                        <div className="suggested-recipe">
+
+                        <div className="image-container">
+                        <img src={meals.strMealThumb} alt={meals.strMeal} width="200" />
+                            </div>
+                            <div className="ingredients-container">
+                            <h4>Ingredients:</h4>
+                        <ul className="ingredients-listItems">
+                            {Object.keys(meals).map((key) => {
+                                if (key.startsWith("strIngredient") && meals[key]) {
+                                    return <li key={key}>{meals[key]}</li>;
+                                }
+                                return null;
+                            })}
+                        </ul>
+                    </div>
+                            </div>
+                <p>{ meals.strInstructions}</p>
+          </div>
+        
+      ) : (
+        <p>No meals found.</p>
+      )}       
     </article>
 </section>
     
