@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ClaudeRecipe from "./ClaudeRecipe";
+import Recipe from "./Recipe";
 import IngredientsList from "./IngredientsList";
 
 export default function Main() {
@@ -36,7 +36,7 @@ export default function Main() {
                 <button name="add-button">Add ingredient</button>
             </form>
             {ingredients.length > 0 && <IngredientsList ingredients={ingredientsListItems} click={buttonClicked} />}
-            {isShown && <ClaudeRecipe ingredients={ingredients}/>}
+            {isShown && <Recipe ingredients={ingredients}/>}
         </main> 
     )
 }

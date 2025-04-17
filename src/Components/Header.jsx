@@ -6,7 +6,7 @@ export default function Header() {
   return (
     <header>
       <img src={chefClaudeIcon} alt="React Logo" width={40}/>
-      <h1>Chef Claude</h1>
+      <h1>RecipeBook</h1>
     </header>
   );
   

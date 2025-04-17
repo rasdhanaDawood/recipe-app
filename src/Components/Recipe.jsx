@@ -2,7 +2,7 @@ import { all } from "axios";
 import React, { useState, useEffect } from "react";
 import '../index.css' ;
 
-export default function ClaudeRecipe({ingredients}) {
+export default function Recipe({ingredients}) {
     const [meals, setMeals] = React.useState([])
     useEffect(() => {
         if (!ingredients) return;
@@ -51,7 +51,7 @@ export default function ClaudeRecipe({ingredients}) {
 
     return (
         <section>
-            <h2>Chef Claude Recommends:</h2>
+            <h2>RecipeBook Recommends:</h2>
             <article className="suggested-recipe-container" aria-live="polite">
             {meals && Object.keys(meals).length > 0 ? (
                     <div key={meals.idMeal}>
